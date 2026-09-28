@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="de" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO & Metadata -->
+    <title>KMU Website-Template - Salon & Handwerk</title>
+    <meta name="description" content="Modernes und helles Single-Page Website-Template für lokale KMU wie Coiffeure oder Handwerker mit Hero, Preisen, Fotogalerie und Kontakt." />
+    <meta property="og:title" content="KMU Website-Template - Salon & Handwerk" />
+    <meta property="og:description" content="Modernes und helles Single-Page Website-Template für lokale KMU mit Hero, Preisen, Fotogalerie und Kontakt." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts: Plus Jakarta Sans (Body & Clean Headings) & Playfair Display (Expressive Accents) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CSS CDN (Production-Hinweis in der Debug-Konsole unterdrücken) -->
+    <script>
+      (function() {
+        var origWarn = console.warn;
+        console.warn = function() {
+          if (arguments[0] && typeof arguments[0] === 'string' && arguments[0].indexOf('cdn.tailwindcss.com') !== -1) {
+            return;
+          }
+          origWarn.apply(console, arguments);
+        };
+      })();
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: 'var(--brand-50, #f2f7f4)',
+                100: 'var(--brand-100, #e2ece5)',
+                200: 'var(--brand-200, #c6dacd)',
+                300: 'var(--brand-300, #9fbfa9)',
+                400: 'var(--brand-400, #739d81)',
+                500: 'var(--brand-500, #537f62)',
+                600: 'var(--brand-600, #3f654d)',
+                700: 'var(--brand-700, #34513f)',
+                800: 'var(--brand-800, #2c4235)',
+                900: 'var(--brand-900, #25372d)',
+              },
+            },
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+              serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            },
+            borderRadius: {
+              '2xl': '1rem',
+              '3xl': '1.5rem',
+              '4xl': '2rem',
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+      :root {
+        /* Salbeigrün Standard */
+        --brand-50: #f4f7f5;
+        --brand-100: #e6ede8;
+        --brand-200: #cee0d3;
+        --brand-300: #a7c5b0;
+        --brand-400: #78a284;
+        --brand-500: #558163;
+        --brand-600: #42674e;
+        --brand-700: #36533f;
+        --brand-800: #2c4234;
+        --brand-900: #24362b;
+      }
+      
+      /* Sanfter Blau-Modus für Handwerker/Technik */
+      body.theme-blue {
+        --brand-50: #f0f7fc;
+        --brand-100: #e0eff8;
+        --brand-200: #c2e0f2;
+        --brand-300: #93c8e9;
+        --brand-400: #5eaadd;
+        --brand-500: #3b8ecc;
+        --brand-600: #2972aa;
+        --brand-700: #235c8b;
+        --brand-800: #214f73;
+        --brand-900: #1f4260;
+      }
+
+      /* Sanfte Bild-Überblendung */
+      .img-loaded {
+        opacity: 1;
+        transition: opacity 0.3s ease-in-out;
+      }
+    </style>
+  </head>
+
+  <body class="bg-[#FCFCFC] text-stone-800 font-sans antialiased selection:bg-brand-100 selection:text-brand-900 flex flex-col min-h-screen">
+
+    <!-- Top Notification / Vorlage Banner -->
+    <div class="bg-stone-100 border-b border-stone-200/80 text-xs py-2 px-4 text-stone-600">
+      <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <span class="inline-block w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+          <span><strong>Muster-Vorlage</strong> für lokales Handwerk & Coiffeur</span>
+          <span class="text-stone-400 hidden sm:inline">·</span>
+          <span class="text-stone-500 hidden sm:inline">Bereit zur Kundenabstimmung & Anpassung</span>
+        </div>
+        <!-- Farbvariante Umschalter für den Kunden -->
+        <div class="flex items-center gap-3">
+          <span class="text-stone-500 text-[11px]">Farbthema:</span>
+          <button id="theme-sage-btn" onclick="setTheme('sage')" class="px-2.5 py-1 rounded-md text-[11px] font-medium bg-brand-600 text-white shadow-xs transition-colors">
+            Salbeigrün
+          </button>
+          <button id="theme-blue-btn" onclick="setTheme('blue')" class="px-2.5 py-1 rounded-md text-[11px] font-medium bg-white text-stone-600 hover:text-stone-900 border border-stone-200 shadow-xs transition-colors">
+            Helles Blau
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Header (Top Bar Contract: 3 Zonen) -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-stone-200/70">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+        
+        <!-- Zone 1: Brand Wordmark (Single Text Element) -->
+        <a href="#" class="group flex items-center gap-2.5 focus-visible:outline-brand-600">
+          <span class="w-8 h-8 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center font-serif text-lg font-bold">
+            A
+          </span>
+          <span class="text-xl font-bold tracking-tight text-stone-900 group-hover:text-brand-600 transition-colors">
+            Atelier Grün
+          </span>
+        </a>
+
+        <!-- Zone 2: Navigation Links -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-stone-600">
+          <a href="#hero" class="hover:text-brand-600 transition-colors">Startseite</a>
+          <a href="#leistungen" class="hover:text-brand-600 transition-colors">Leistungen & Preise</a>
+          <a href="#galerie" class="hover:text-brand-600 transition-colors">Galerie</a>
+          <a href="#kontakt" class="hover:text-brand-600 transition-colors">Öffnungszeiten & Kontakt</a>
+        </nav>
+
+        <!-- Zone 3: Primary CTA Button -->
+        <div class="flex items-center gap-3">
+          <button onclick="openPhoneModal()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 active:scale-95 shadow-sm shadow-brand-600/20 transition-all whitespace-nowrap">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
+            <span>Jetzt anrufen</span>
+          </button>
+
+          <!-- Mobile Hamburger Toggle -->
+          <button id="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menü öffnen" class="md:hidden p-2 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 transition-colors">
+            <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+            <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Mobile Dropdown Menu -->
+      <div id="mobile-menu" class="hidden md:hidden border-t border-stone-200 bg-white/95 px-6 py-5 space-y-4 shadow-lg">
+        <a href="#hero" onclick="toggleMobileMenu()" class="block text-base font-medium text-stone-700 hover:text-brand-600">Startseite</a>
+        <a href="#leistungen" onclick="toggleMobileMenu()" class="block text-base font-medium text-stone-700 hover:text-brand-600">Leistungen & Preise</a>
+        <a href="#galerie" onclick="toggleMobileMenu()" class="block text-base font-medium text-stone-700 hover:text-brand-600">Galerie</a>
+        <a href="#kontakt" onclick="toggleMobileMenu()" class="block text-base font-medium text-stone-700 hover:text-brand-600">Öffnungszeiten & Kontakt</a>
+        <div class="pt-3 border-t border-stone-100">
+          <button onclick="toggleMobileMenu(); openPhoneModal();" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-600 text-white font-semibold shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
+            <span>Jetzt anrufen (+41 44 123 45 67)</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-grow">
+      
+      <!-- HERO SEKTION -->
+      <section id="hero" class="relative pt-12 pb-20 md:pt-20 md:pb-28 overflow-hidden bg-gradient-to-b from-brand-50/60 via-white to-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            
+            <!-- Hero Text Content -->
+            <div class="lg:col-span-7 space-y-6">
+              
+              <!-- Clean Sub-Label (No Pill, Editorial Style) -->
+              <div class="flex items-center gap-2 text-xs font-semibold text-brand-700 tracking-wide uppercase">
+                <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+                <span>Handwerk mit Leidenschaft</span>
+                <span aria-hidden="true" class="text-stone-300">·</span>
+                <span>Zürich & Region</span>
+              </div>
+
+              <!-- Main Headline (Balanced Typography) -->
+              <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-stone-900 leading-[1.12]" style="text-wrap: balance;">
+                Perfektes Handwerk & entspannte Wohlfühl-Momente.
+              </h1>
+
+              <!-- Subtitle / Value Proposition with Lorem Ipsum -->
+              <p class="text-lg text-stone-600 leading-relaxed max-w-xl">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Wir verbinden meisterliche Präzision mit persönlicher Beratung in entspannter Atmosphäre.
+              </p>
+
+              <!-- CTAs: Prominenter "Jetzt anrufen" Button + Sekundäraktion -->
+              <div class="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                <button onclick="openPhoneModal()" class="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl text-base font-semibold text-white bg-brand-600 hover:bg-brand-700 active:scale-[0.98] shadow-lg shadow-brand-600/25 transition-all">
+                  <svg class="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                  </svg>
+                  <span>Jetzt anrufen: 044 123 45 67</span>
+                </button>
+
+                <a href="#leistungen" class="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl text-base font-medium text-stone-700 bg-stone-100 hover:bg-stone-200/80 active:scale-[0.98] transition-all">
+                  <span>Preise & Leistungen</span>
+                  <svg class="w-4 h-4 text-stone-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                  </svg>
+                </a>
+              </div>
+
+              <!-- Quick Trust Points -->
+              <div class="pt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-stone-500">
+                <div class="flex items-center gap-1.5">
+                  <svg class="w-4 h-4 text-brand-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>Termine auch kurzfristig</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <svg class="w-4 h-4 text-brand-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>Zertifizierte Meisterqualität</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <svg class="w-4 h-4 text-brand-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>Zentrale Lage mit Parkplatz</span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Hero Image Visual Slot -->
+            <div class="lg:col-span-5 relative">
+              <div class="relative mx-auto max-w-md lg:max-w-none">
+                <!-- Weicher Deko-Hintergrund -->
+                <div class="absolute -inset-4 bg-brand-100/50 rounded-4xl filter blur-xl -z-10 transform -rotate-1"></div>
+                
+                <div class="relative rounded-3xl overflow-hidden shadow-2xl shadow-stone-900/10 border border-stone-200/80 bg-stone-100 aspect-[4/3] lg:aspect-[5/4]">
+                  <img 
+                    src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=80" 
+                    alt="Atelier Innenansicht mit modernem hellem Ambiente" 
+                    referrerpolicy="no-referrer"
+                    class="w-full h-full object-cover object-center"
+                    onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full flex flex-col items-center justify-center bg-brand-50 p-8 text-center text-brand-800\'><div class=\'w-16 h-16 rounded-2xl bg-brand-200 flex items-center justify-center mb-3\'><svg class=\'w-8 h-8 text-brand-700\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4\'/></svg></div><p class=\'font-semibold text-lg\'>Atelier Grün & Coiffeur</p><p class=\'text-xs text-brand-600 mt-1\'>Ihr lokaler Partner für erstklassigen Service</p></div>';"
+                  />
+                  <!-- Floating Badge am Bild -->
+                  <div class="absolute bottom-4 left-4 right-4 sm:right-auto bg-white/95 backdrop-blur-md px-4 py-3 rounded-2xl shadow-md border border-stone-200/80 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center shrink-0">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-xs font-medium text-stone-500">Heute für Sie da</p>
+                      <p class="text-sm font-bold text-stone-800">08:30 – 18:30 Uhr</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- 3-SPALTEN-ÜBERSICHT: LEISTUNGEN & PREISE -->
+      <section id="leistungen" class="py-20 md:py-28 bg-[#FAFAFA] border-t border-stone-200/70">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+          
+          <!-- Section Header -->
+          <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+            <span class="text-xs font-semibold text-brand-600 uppercase tracking-wider">Kompakte Preisübersicht</span>
+            <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-stone-900">
+              Unsere Leistungen & faire Preise
+            </h2>
+            <p class="text-base text-stone-600">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Transparente Preise ohne versteckte Aufschläge.
+            </p>
+          </div>
+
+          <!-- 3-Columns Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+            
+            <!-- Karte 1: Basis / Schnitt -->
+            <div class="bg-white rounded-3xl p-8 border border-stone-200/80 shadow-xs hover:shadow-xl hover:border-brand-300 transition-all flex flex-col justify-between">
+              <div>
+                <div class="w-12 h-12 rounded-2xl bg-stone-100 text-stone-700 flex items-center justify-center mb-6">
+                  <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879a3 3 0 11-4.242-4.242 3 3 0 014.242 0M7 7l2.879 2.879"/>
+                  </svg>
+                </div>
+                <h3 class="text-xl font-bold text-stone-900">Schnitt & Styling</h3>
+                <p class="text-sm text-stone-500 mt-2">Klassische und moderne Schnitte mit typgerechter Beratung.</p>
+                
+                <div class="my-6 pt-6 border-t border-stone-100 space-y-3 text-sm">
+                  <div class="flex justify-between items-baseline">
+                    <span class="text-stone-700">Herren Haarschnitt</span>
+                    <span class="font-bold text-stone-900 font-mono">ab CHF 48.–</span>
+                  </div>
+                  <div class="flex justify-between items-baseline">
+                    <span class="text-stone-700">Damen Waschen & Schneiden</span>
+                    <span class="font-bold text-stone-900 font-mono">ab CHF 75.–</span>
+                  </div>
+                  <div class="flex justify-between items-baseline">
+                    <span class="text-stone-700">Föhnen & Festtags-Styling</span>
+                    <span class="font-bold text-stone-900 font-mono">ab CHF 55.–</span>
+                  </div>
+                  <div class="flex justify-between items-baseline">
+                    <span class="text-stone-700">Bartpflege & Rasur</span>
+                    <span class="font-bold text-stone-900 font-mono">CHF 32.–</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-6">
+                <button onclick="requestBooking('Schnitt & Styling')" class="w-full py-3 px-4 rounded-xl text-sm font-semibold text-stone-700 bg-stone-100 hover:bg-brand-600 hover:text-white transition-all text-center">
+                  Diesen Service wählen
+                </button>
+              </div>
+            </div>
+
+            <!-- Karte 2: Highlight / Farbe & Veredelung (Hervorgehoben) -->
+            <div class="bg-white rounded-3xl p-8 border-2 border-brand-500 shadow-xl shadow-brand-500/10 flex flex-col justify-between relative">
+              <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-600 text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
+                Beliebteste Wahl
+              </div>
+
+              <div>
+                <div class="w-12 h-12 rounded-2xl bg-brand-100 text-brand-700 flex items-center justify-center mb-6">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4 4.5 4.5 0 013.895-4.478l9.043-9.043a1.5 1.5 0 012.122 0l2.122 2.122a1.5 1.5 0 010 2.122l-9.043 9.043A4.5 4.5 0 017 21z"/>
+                  </svg>
+                </div>
+                <h3 class="text-xl font-bold text-stone-900">Farbe & Balayage</h3>
+                <p class="text-sm text-stone-500 mt-2">Hochwertige Nuancen, Glanz und schonende Colorationstechniken.</p>
+                
+                <div class="my-6 pt-6 border-t border-stone-100 space-y-3 text-sm">
+                  <div class="flex justify-between items-baseline">
+                    <span class="text-stone-700">Ansatzfärbung & Glossing</span>
+                    <span class="font-bold text-stone-900 font-mono">ab CHF 85.–</span>
+                  </div>
+                  <div class="flex justify-between items-baseline">
+                    <span class="text-stone-700">Balayage & Paintings</span>
+                    <span class="font-bold text-stone-900 font-mono">ab CHF 160.–</span>
+                  </div>
+                  <div class="flex justify-between items-baseline">
+                    <span class="text-stone-700">Foliensträhnen komplett</span>
+                    <span class="font-bold text-stone-900 font-mono">ab CHF 140.–</span>
+                  </div>
+                  <div class="flex justify-between items-baseline">
+                    <span class="text-stone-700">Farbkorrektur & Beratung</span>
+                    <span class="font-bold text-stone-900 font-mono">nach Aufwand</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-6">
+                <button onclick="requestBooking('Farbe & Balayage')" class="w-full py-3 px-4 rounded-xl text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 shadow-md shadow-brand-600/20 active:scale-[0.98] transition-all text-center">
+                  Diesen Service wählen
+                </button>
+              </div>
+            </div>
+
+            <!-- Karte 3: Premium / Pflege & Spa -->
+            <div class="bg-white rounded-3xl p-8 border border-stone-200/80 shadow-xs hover:shadow-xl hover:border-brand-300 transition-all flex flex-col justify-between">
+              <div>
+                <div class="w-12 h-12 rounded-2xl bg-stone-100 text-stone-700 flex items-center justify-center mb-6">
+                  <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                  </svg>
+                </div>
+                <h3 class="text-xl font-bold text-stone-900">Pflege & Verwöhnen</h3>
+                <p class="text-sm text-stone-500 mt-2">Tiefenwirksame Kuren, Kopfmassage und Entspannung pur.</p>
+                
+                <div class="my-6 pt-6 border-t border-stone-100 space-y-3 text-sm">
+                  <div class="flex justify-between items-baseline">
+                    <span class="text-stone-700">Intensiv-Keratin Maske</span>
+                    <span class="font-bold text-stone-900 font-mono">CHF 38.–</span>
+                  </div>
+                  <div class="flex justify-between items-baseline">
+                    <span class="text-stone-700">Aroma-Kopfmassage (20 Min)</span>
+                    <span class="font-bold text-stone-900 font-mono">CHF 45.–</span>
+                  </div>
+                  <div class="flex justify-between items-baseline">
+                    <span class="text-stone-700">Olaplex Rebuild Treatment</span>
+                    <span class="font-bold text-stone-900 font-mono">ab CHF 50.–</span>
+                  </div>
+                  <div class="flex justify-between items-baseline">
+                    <span class="text-stone-700">Kopfhaut-Peeling & Kur</span>
+                    <span class="font-bold text-stone-900 font-mono">CHF 42.–</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-6">
+                <button onclick="requestBooking('Pflege & Verwöhnen')" class="w-full py-3 px-4 rounded-xl text-sm font-semibold text-stone-700 bg-stone-100 hover:bg-brand-600 hover:text-white transition-all text-center">
+                  Diesen Service wählen
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Hinweisbox für individuelle Anfragen -->
+          <div class="mt-12 p-6 rounded-2xl bg-white border border-stone-200/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3 text-stone-600 text-sm">
+              <svg class="w-5 h-5 text-brand-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span>Benötigen Sie eine individuelle handwerkliche Spezialleistung oder Braut-Styling?</span>
+            </div>
+            <button onclick="openPhoneModal()" class="px-5 py-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold whitespace-nowrap transition-colors">
+              Kostenlose Beratung anfragen
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- FOTOGALERIE (4 BILDER RASTER) -->
+      <section id="galerie" class="py-20 md:py-28 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+          
+          <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+            <div>
+              <span class="text-xs font-semibold text-brand-600 uppercase tracking-wider">Visuelle Einblicke</span>
+              <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-stone-900 mt-1">
+                Eindrücke aus unserem Atelier
+              </h2>
+            </div>
+            <p class="text-stone-500 text-sm max-w-md">
+              Klicken Sie auf ein Bild, um es in der Galerie-Ansicht zu vergrössern. Ein Einblick in unsere Arbeitsweise und Atmosphäre.
+            </p>
+          </div>
+
+          <!-- 4-Bilder Grid (Responsive) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <!-- Bild 1 -->
+            <div 
+              onclick="openLightbox('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=85', 'Präzises Styling & Detailarbeit')"
+              class="group relative rounded-2xl overflow-hidden aspect-[4/5] bg-stone-100 cursor-pointer shadow-xs hover:shadow-lg transition-all"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" 
+                alt="Haarstyling im Detail" 
+                referrerpolicy="no-referrer"
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                onerror="this.parentElement.classList.add('flex', 'items-center', 'justify-center', 'p-4', 'text-stone-400'); this.parentElement.innerText='Bild: Styling & Detail';"
+              />
+              <div class="absolute inset-0 bg-stone-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                <span class="text-xs font-medium text-white bg-black/60 backdrop-blur-xs px-3 py-1 rounded-full">
+                  Vergrössern
+                </span>
+              </div>
+            </div>
+
+            <!-- Bild 2 -->
+            <div 
+              onclick="openLightbox('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1200&q=85', 'Traditionelles Handwerk & Werkzeuge')"
+              class="group relative rounded-2xl overflow-hidden aspect-[4/5] bg-stone-100 cursor-pointer shadow-xs hover:shadow-lg transition-all"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=600&q=80" 
+                alt="Handwerkzeuge und Präzisionsarbeit" 
+                referrerpolicy="no-referrer"
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                onerror="this.parentElement.classList.add('flex', 'items-center', 'justify-center', 'p-4', 'text-stone-400'); this.parentElement.innerText='Bild: Werkzeuge & Handwerk';"
+              />
+              <div class="absolute inset-0 bg-stone-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                <span class="text-xs font-medium text-white bg-black/60 backdrop-blur-xs px-3 py-1 rounded-full">
+                  Vergrössern
+                </span>
+              </div>
+            </div>
+
+            <!-- Bild 3 -->
+            <div 
+              onclick="openLightbox('https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1200&q=85', 'Persönliche Beratung & Betreuung')"
+              class="group relative rounded-2xl overflow-hidden aspect-[4/5] bg-stone-100 cursor-pointer shadow-xs hover:shadow-lg transition-all"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=600&q=80" 
+                alt="Beratung im Salon" 
+                referrerpolicy="no-referrer"
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                onerror="this.parentElement.classList.add('flex', 'items-center', 'justify-center', 'p-4', 'text-stone-400'); this.parentElement.innerText='Bild: Beratung & Service';"
+              />
+              <div class="absolute inset-0 bg-stone-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                <span class="text-xs font-medium text-white bg-black/60 backdrop-blur-xs px-3 py-1 rounded-full">
+                  Vergrössern
+                </span>
+              </div>
+            </div>
+
+            <!-- Bild 4 -->
+            <div 
+              onclick="openLightbox('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=1200&q=85', 'Natürliche Pflegeprodukte & Ambiente')"
+              class="group relative rounded-2xl overflow-hidden aspect-[4/5] bg-stone-100 cursor-pointer shadow-xs hover:shadow-lg transition-all"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=600&q=80" 
+                alt="Pflegeprodukte und Salon-Atmosphäre" 
+                referrerpolicy="no-referrer"
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                onerror="this.parentElement.classList.add('flex', 'items-center', 'justify-center', 'p-4', 'text-stone-400'); this.parentElement.innerText='Bild: Pflegeprodukte';"
+              />
+              <div class="absolute inset-0 bg-stone-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                <span class="text-xs font-medium text-white bg-black/60 backdrop-blur-xs px-3 py-1 rounded-full">
+                  Vergrössern
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- CALL TO ACTION BANNER VOR DEM FOOTER -->
+      <section class="py-16 bg-brand-50 border-y border-brand-100">
+        <div class="max-w-4xl mx-auto px-4 text-center space-y-6">
+          <h2 class="text-2xl sm:text-3xl font-bold text-stone-900">
+            Möchten Sie Ihren nächsten Termin vereinbaren?
+          </h2>
+          <p class="text-stone-600 max-w-xl mx-auto">
+            Rufen Sie uns direkt an oder schreiben Sie uns kurz. Wir finden die passende Zeit für Sie!
+          </p>
+          <div class="flex flex-wrap justify-center items-center gap-4">
+            <button onclick="openPhoneModal()" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-base font-semibold text-white bg-brand-600 hover:bg-brand-700 shadow-md transition-all">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+              </svg>
+              <span>Jetzt anrufen: +41 44 123 45 67</span>
+            </button>
+            <button onclick="requestBooking('Allgemeine Terminanfrage')" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full text-base font-medium text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 shadow-xs transition-all">
+              <span>Terminanfrage senden</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- MINIMALISTISCHER FOOTER MIT ADRESSE UND ÖFFNUNGSZEITEN -->
+    <footer id="kontakt" class="bg-white border-t border-stone-200 pt-16 pb-12">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-stone-100">
+          
+          <!-- Spalte 1: Brand & Kurzbeschrieb -->
+          <div class="md:col-span-4 space-y-4">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-lg bg-brand-100 text-brand-700 flex items-center justify-center font-serif text-base font-bold">
+                A
+              </span>
+              <span class="text-lg font-bold tracking-tight text-stone-900">
+                Atelier Grün
+              </span>
+            </div>
+            <p class="text-sm text-stone-500 leading-relaxed max-w-sm">
+              Ihr lokaler Meisterbetrieb für typgerechte Haarschnitte, schonende Colorationen und ehrliches Handwerk mit Herz.
+            </p>
+            <div class="pt-2">
+              <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-800 text-xs font-medium border border-emerald-200/60">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span id="live-opening-status">Heute geöffnet · schliesst um 18:30 Uhr</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Spalte 2: Adresse & Kontakt -->
+          <div class="md:col-span-4 space-y-3">
+            <h4 class="text-xs font-semibold text-stone-900 uppercase tracking-wider">Standort & Kontakt</h4>
+            <div class="text-sm text-stone-600 space-y-1.5">
+              <p class="font-medium text-stone-900">Atelier Grün GmbH</p>
+              <p>Mustergasse 14</p>
+              <p>8001 Zürich, Schweiz</p>
+            </div>
+            <div class="pt-2 space-y-2 text-sm">
+              <div class="flex items-center gap-2 text-stone-600">
+                <svg class="w-4 h-4 text-brand-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                </svg>
+                <a href="tel:+41441234567" class="hover:text-brand-600 font-mono font-medium">+41 44 123 45 67</a>
+              </div>
+              <div class="flex items-center gap-2 text-stone-600">
+                <svg class="w-4 h-4 text-brand-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+                <a href="mailto:hallo@atelier-gruen.ch" class="hover:text-brand-600">hallo@atelier-gruen.ch</a>
+              </div>
+            </div>
+            <!-- Interaktive Buttons: Adresse kopieren & Route -->
+            <div class="pt-2 flex items-center gap-3">
+              <button onclick="copyAddress(this)" class="text-xs font-medium text-stone-600 hover:text-stone-900 inline-flex items-center gap-1.5 py-1 px-2.5 rounded-lg border border-stone-200 bg-stone-50 hover:bg-stone-100 transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                </svg>
+                <span>Adresse kopieren</span>
+              </button>
+              <a href="https://maps.google.com/?q=Zürich" target="_blank" rel="noopener noreferrer" class="text-xs font-medium text-brand-600 hover:underline inline-flex items-center gap-1">
+                <span>Route planen</span>
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Spalte 3: Öffnungszeiten -->
+          <div class="md:col-span-4 space-y-3">
+            <h4 class="text-xs font-semibold text-stone-900 uppercase tracking-wider">Öffnungszeiten</h4>
+            <div class="text-sm space-y-2">
+              <div class="flex justify-between items-center text-stone-600">
+                <span>Montag</span>
+                <span class="text-stone-400">Geschlossen</span>
+              </div>
+              <div class="flex justify-between items-center font-medium text-stone-900 bg-brand-50/70 px-2 py-1 rounded-md">
+                <span>Dienstag – Freitag</span>
+                <span class="font-mono">08:30 – 18:30</span>
+              </div>
+              <div class="flex justify-between items-center text-stone-600">
+                <span>Samstag</span>
+                <span class="font-mono">08:00 – 16:00</span>
+              </div>
+              <div class="flex justify-between items-center text-stone-600">
+                <span>Sonntag & Feiertage</span>
+                <span class="text-stone-400">Geschlossen</span>
+              </div>
+            </div>
+            <p class="text-[12px] text-stone-400 pt-1">
+              * Abendtermine nach 18:30 Uhr auf telefonische Anfrage möglich.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Copyright & Legal Sub-Footer -->
+        <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-400 gap-4">
+          <p>© 2026 Atelier Grün. Visuelles Template zur Entscheidungsfindung.</p>
+          <div class="flex items-center gap-6">
+            <a href="#" class="hover:text-stone-600 transition-colors">Impressum</a>
+            <a href="#" class="hover:text-stone-600 transition-colors">Datenschutz</a>
+            <a href="#" class="hover:text-stone-600 transition-colors">AGB</a>
+          </div>
+        </div>
+
+      </div>
+    </footer>
+
+    <!-- INTERAKTIVES MODAL: ANRUF / KONTAKT -->
+    <div id="phone-modal" class="fixed inset-0 z-50 hidden bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+      <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-stone-200 transform transition-all text-center space-y-5">
+        <div class="w-14 h-14 rounded-2xl bg-brand-100 text-brand-600 flex items-center justify-center mx-auto">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+          </svg>
+        </div>
+        
+        <div>
+          <h3 class="text-xl font-bold text-stone-900">Jetzt anrufen</h3>
+          <p class="text-xs text-stone-500 mt-1">Ihr direkter Draht zu unseren Mitarbeitern</p>
+          <p class="text-2xl font-bold font-mono text-brand-700 mt-3">+41 44 123 45 67</p>
+        </div>
+
+        <div class="space-y-2 pt-2">
+          <a href="tel:+41441234567" class="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold shadow-sm transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
+            <span>Verbindung herstellen</span>
+          </a>
+          <button onclick="copyPhone()" id="copy-phone-btn" class="w-full py-2.5 rounded-xl border border-stone-200 text-stone-700 hover:bg-stone-50 font-medium text-xs transition-colors">
+            Nummer in Zwischenablage kopieren
+          </button>
+          <button onclick="closePhoneModal()" class="w-full py-2 text-stone-400 hover:text-stone-600 text-xs">
+            Schliessen
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERAKTIVES MODAL: TERMIN-ANFRAGE -->
+    <div id="booking-modal" class="fixed inset-0 z-50 hidden bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+      <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-stone-200 transform transition-all space-y-5">
+        <div class="flex items-center justify-between pb-2 border-b border-stone-100">
+          <div>
+            <span class="text-xs font-semibold text-brand-600 uppercase">Termin-Anfrage</span>
+            <h3 class="text-xl font-bold text-stone-900" id="booking-service-title">Service wählen</h3>
+          </div>
+          <button onclick="closeBookingModal()" class="p-2 text-stone-400 hover:text-stone-700 rounded-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <form id="booking-form" onsubmit="handleBookingSubmit(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Ihr Name *</label>
+            <input type="text" required placeholder="z. B. Anna Müller" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500" />
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">Telefonnummer *</label>
+              <input type="tel" required placeholder="079 123 45 67" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">Wunschtermin</label>
+              <input type="date" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-stone-700" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Bemerkung (optional)</label>
+            <textarea rows="2" placeholder="Wünsche, bestehende Coloration oder Fragen..." class="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 resize-none"></textarea>
+          </div>
+          <div class="pt-2">
+            <button type="submit" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-md transition-all">
+              Unverbindliche Anfrage senden
+            </button>
+            <p class="text-[11px] text-stone-400 text-center mt-2">Wir melden uns innerhalb von 2 Stunden telefonisch oder per SMS bei Ihnen.</p>
+          </div>
+        </form>
+
+        <div id="booking-success" class="hidden text-center py-6 space-y-3">
+          <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <h4 class="text-lg font-bold text-stone-900">Vielen Dank für Ihre Anfrage!</h4>
+          <p class="text-xs text-stone-500 max-w-xs mx-auto">Ihre Terminanfrage wurde im System vorgemerkt. Wir kontaktieren Sie zur Bestätigung.</p>
+          <button onclick="closeBookingModal()" class="px-5 py-2 rounded-xl bg-stone-100 text-stone-700 text-xs font-semibold hover:bg-stone-200 mt-2">
+            Fenster schliessen
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERAKTIVE FOTO-LIGHTBOX -->
+    <div id="lightbox-modal" onclick="closeLightbox(event)" class="fixed inset-0 z-50 hidden bg-stone-950/85 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="relative max-w-4xl w-full flex flex-col items-center" onclick="event.stopPropagation()">
+        <button onclick="closeLightboxDirect()" class="absolute -top-12 right-0 text-white/80 hover:text-white p-2">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+        <div class="rounded-2xl overflow-hidden shadow-2xl bg-black max-h-[80vh] flex items-center justify-center border border-white/10">
+          <img id="lightbox-img" src="" alt="Grossansicht" class="max-h-[75vh] w-auto object-contain" />
+        </div>
+        <p id="lightbox-caption" class="text-white/90 text-sm mt-4 font-medium tracking-wide"></p>
+      </div>
+    </div>
+
+    <!-- TOAST BENACHRICHTIGUNG -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-stone-900 text-white text-xs px-4 py-3 rounded-xl shadow-xl flex items-center gap-2">
+      <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+      </svg>
+      <span id="toast-message">Meldung</span>
+    </div>
+
+    <!-- PURES VANILLA JAVASCRIPT FÜR DIE INTERAKTIONEN -->
+    <script>
+      // 1. Farbschema-Wechsler (Salbeigrün / Helles Blau)
+      function setTheme(theme) {
+        const sageBtn = document.getElementById('theme-sage-btn');
+        const blueBtn = document.getElementById('theme-blue-btn');
+
+        if (theme === 'blue') {
+          document.body.classList.add('theme-blue');
+          blueBtn.className = "px-2.5 py-1 rounded-md text-[11px] font-medium bg-brand-600 text-white shadow-xs transition-colors";
+          sageBtn.className = "px-2.5 py-1 rounded-md text-[11px] font-medium bg-white text-stone-600 hover:text-stone-900 border border-stone-200 shadow-xs transition-colors";
+          showToast('Farbthema: Helles Blau aktiviert');
+        } else {
+          document.body.classList.remove('theme-blue');
+          sageBtn.className = "px-2.5 py-1 rounded-md text-[11px] font-medium bg-brand-600 text-white shadow-xs transition-colors";
+          blueBtn.className = "px-2.5 py-1 rounded-md text-[11px] font-medium bg-white text-stone-600 hover:text-stone-900 border border-stone-200 shadow-xs transition-colors";
+          showToast('Farbthema: Salbeigrün aktiviert');
+        }
+      }
+
+      // 2. Anruf-Modal Steuerung
+      function openPhoneModal() {
+        document.getElementById('phone-modal').classList.remove('hidden');
+      }
+      function closePhoneModal() {
+        document.getElementById('phone-modal').classList.add('hidden');
+      }
+
+      function copyPhone() {
+        const phone = '+41441234567';
+        navigator.clipboard.writeText(phone).then(() => {
+          const btn = document.getElementById('copy-phone-btn');
+          const original = btn.innerText;
+          btn.innerText = '✓ In Zwischenablage kopiert!';
+          btn.classList.add('text-emerald-700', 'border-emerald-300', 'bg-emerald-50');
+          setTimeout(() => {
+            btn.innerText = original;
+            btn.classList.remove('text-emerald-700', 'border-emerald-300', 'bg-emerald-50');
+          }, 2500);
+          showToast('Telefonnummer kopiert: +41 44 123 45 67');
+        }).catch(() => {
+          showToast('+41 44 123 45 67');
+        });
+      }
+
+      // 3. Adresse kopieren Funktion
+      function copyAddress(btn) {
+        const address = 'Atelier Grün GmbH, Mustergasse 14, 8001 Zürich';
+        navigator.clipboard.writeText(address).then(() => {
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '<span>✓ Kopiert!</span>';
+          setTimeout(() => {
+            btn.innerHTML = originalText;
+          }, 2000);
+          showToast('Adresse in Zwischenablage kopiert!');
+        });
+      }
+
+      // 4. Terminbuchung Modal
+      function requestBooking(serviceName) {
+        document.getElementById('booking-service-title').innerText = serviceName;
+        document.getElementById('booking-form').classList.remove('hidden');
+        document.getElementById('booking-success').classList.add('hidden');
+        document.getElementById('booking-modal').classList.remove('hidden');
+      }
+
+      function closeBookingModal() {
+        document.getElementById('booking-modal').classList.add('hidden');
+      }
+
+      function handleBookingSubmit(e) {
+        e.preventDefault();
+        document.getElementById('booking-form').classList.add('hidden');
+        document.getElementById('booking-success').classList.remove('hidden');
+        showToast('Termin-Anfrage erfolgreich übermittelt!');
+      }
+
+      // 5. Fotogalerie Lightbox
+      function openLightbox(imgSrc, caption) {
+        const modal = document.getElementById('lightbox-modal');
+        const img = document.getElementById('lightbox-img');
+        const captionEl = document.getElementById('lightbox-caption');
+
+        img.src = imgSrc;
+        captionEl.innerText = caption;
+        modal.classList.remove('hidden');
+      }
+
+      function closeLightbox(e) {
+        document.getElementById('lightbox-modal').classList.add('hidden');
+      }
+
+      function closeLightboxDirect() {
+        document.getElementById('lightbox-modal').classList.add('hidden');
+      }
+
+      // Tastatur-Events (z. B. Escape zum Schliessen)
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closePhoneModal();
+          closeBookingModal();
+          closeLightboxDirect();
+        }
+      });
+
+      // 6. Mobile Menü Toggle
+      function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        const hamburger = document.getElementById('hamburger-icon');
+        const close = document.getElementById('close-icon');
+
+        const isHidden = menu.classList.contains('hidden');
+        if (isHidden) {
+          menu.classList.remove('hidden');
+          hamburger.classList.add('hidden');
+          close.classList.remove('hidden');
+        } else {
+          menu.classList.add('hidden');
+          hamburger.classList.remove('hidden');
+          close.classList.add('hidden');
+        }
+      }
+
+      // 7. Toast Benachrichtigung
+      let toastTimeout;
+      function showToast(message) {
+        const toast = document.getElementById('toast');
+        const msgEl = document.getElementById('toast-message');
+        msgEl.innerText = message;
+
+        clearTimeout(toastTimeout);
+        toast.classList.remove('translate-y-20', 'opacity-0');
+        toast.classList.add('translate-y-0', 'opacity-100');
+
+        toastTimeout = setTimeout(() => {
+          toast.classList.remove('translate-y-0', 'opacity-100');
+          toast.classList.add('translate-y-20', 'opacity-0');
+        }, 3000);
+      }
+    </script>
+  </body>
+</html>
